@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "h19_api-v4-postgres-nest-w-o-orm",
+  "name": "h20_api-v4-postgres-nest-w-o-orm",
   "builds": [
     { "src": "src/main.ts", "use": "@vercel/node" }
   ],
