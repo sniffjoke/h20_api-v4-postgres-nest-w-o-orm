@@ -19,7 +19,7 @@ export class CommentsService {
     private readonly postsRepository: PostsRepository,
     private readonly commentsRepository: CommentsRepository,
     private readonly usersCheckHandler: UsersCheckHandler,
-    @InjectDataSource() private readonly dataSource: DataSource
+    @InjectDataSource() private readonly dataSource: DataSource,
   ) {
   }
 
@@ -33,16 +33,16 @@ export class CommentsService {
     const findedPost = await this.postsRepository.findPostById(postId);
     const newCommentId = await this.commentsRepository.createComment(
       commentDto,
-      {userId: user.id, userLogin: user.login},
-      postId
-    )
+      { userId: user.id, userLogin: user.login },
+      postId,
+    );
     // const newComment = new this.commentModel({
     //   ...comment,
     //   postId,
     //   commentatorInfo: { userId: user._id, userLogin: user.login },
     // });
     // const saveData = await this.commentsRepository.saveComment(newComment);
-    return newCommentId
+    return newCommentId;
   }
 
   async updateCommentById(id: string, dto: CommentCreateModel, bearerHeader: string) {
@@ -75,20 +75,14 @@ export class CommentsService {
   }
 
   async updateCommentByIdWithLikeStatus(bearerHeader: string, commentId: string) {
-    // const token = this.tokensService.getToken(bearerHeader);
-    // const decodedToken: any = this.tokensService.validateAccessToken(token);
-    // const user: HydratedDocument<User> | null = await this.userModel.findById(decodedToken?._id);
-    // if (!user) {
-    //   throw new NotFoundException('User not found');
-    // }
-    // const findedComment = await this.commentModel.findById(commentId);
-    // if (!findedComment) {
-    //   throw new NotFoundException('Post not found');
-    // }
-    // return {
-    //   findedComment,
-    //   user,
-    // };
+    const token = this.tokensService.getToken(bearerHeader);
+    const decodedToken: any = this.tokensService.validateAccessToken(token);
+    const user = await this.usersRepository.findUserById(decodedToken?._id);
+    const findedComment = await this.commentsRepository.findCommentById(commentId);
+    return {
+      findedComment,
+      user,
+    };
   }
 
   async generateCommentsData(items: CommentViewModel[], bearerHeader: string) {
@@ -101,13 +95,17 @@ export class CommentsService {
 
   async generateNewCommentData(item: any, bearerHeader: string) {
     // const isUserExists = await this.usersRepository.findUserByToken(bearerHeader);
-    let user
+    let user;
     if (bearerHeader) {
-      const token = this.tokensService.getToken(bearerHeader);
-      const decodedToken = this.tokensService.decodeToken(token);
-      user = await this.usersRepository.findUserById(decodedToken._id);
+      try {
+        const token = this.tokensService.getToken(bearerHeader);
+        const decodedToken = this.tokensService.decodeToken(token);
+        user = await this.usersRepository.findUserByIdOrNull(decodedToken._id);
+      } catch {
+        user = null;
+      }
     } else {
-      user = null
+      user = null;
     }
     // const likeStatus = await this.likeModel.findOne({ commentId: item.id, userId: isUserExists?._id });
     const likeStatus = await this.dataSource.query(
@@ -116,9 +114,9 @@ export class CommentsService {
             FROM likes
             WHERE "commentId" = $1 AND "userId" = $2  
       `,
-      [item.id, user?.id]
-    )
-    const myStatus = user && likeStatus.length ? likeStatus.status : LikeStatus.None;
+      [item.id, user?.id],
+    );
+    const myStatus = user && likeStatus.length ? likeStatus[0].status : LikeStatus.None;
     const newCommentData = this.addStatusPayload(item, myStatus);
     return newCommentData;
   }

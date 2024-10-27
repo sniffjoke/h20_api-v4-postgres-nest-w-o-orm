@@ -75,7 +75,6 @@ export class PostsService {
       } catch {
         user = null;
       }
-
     } else {
       user = null;
     }

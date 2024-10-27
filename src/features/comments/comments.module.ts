@@ -8,11 +8,14 @@ import { UsersModule } from '../users/users.module';
 import { TokensService } from '../tokens/application/tokens.service';
 import { UsersRepository } from '../users/infrastructure/users.repository';
 import { UsersCheckHandler } from '../users/domain/users.check-handler';
+import { LikeHandler } from '../likes/domain/like.handler';
+import { LikesModule } from '../likes/likes.module';
 
 @Module({
   imports: [
     forwardRef(() => PostsModule),
     UsersModule,
+    LikesModule
   ],
   controllers: [CommentsController],
   providers: [
@@ -21,7 +24,8 @@ import { UsersCheckHandler } from '../users/domain/users.check-handler';
     CommentsQueryRepository,
     TokensService,
     UsersRepository,
-    UsersCheckHandler
+    UsersCheckHandler,
+    LikeHandler
   ],
   exports: [
     CommentsService,

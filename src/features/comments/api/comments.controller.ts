@@ -6,6 +6,7 @@ import { CommentsService } from '../application/comments.service';
 import { JwtAuthGuard } from '../../../core/guards/jwt-auth.guard';
 import { CommentsRepository } from '../infrastructure/comments.repository';
 import { CommentCreateModel } from './models/input/create-comment.input.model';
+import { LikeHandler } from '../../likes/domain/like.handler';
 
 @Controller('comments')
 export class CommentsController {
@@ -13,6 +14,7 @@ export class CommentsController {
     private readonly commentsService: CommentsService,
     private readonly commentsRepository: CommentsRepository,
     private readonly commentsQueryRepository: CommentsQueryRepository,
+    private readonly likeHandler: LikeHandler
   ) {
 
   }
@@ -45,11 +47,11 @@ export class CommentsController {
   @HttpCode(204)
   @UseGuards(JwtAuthGuard)
   async updatePostByIdWithLikeStatus(@Param('id') commentId: string, @Req() req: Request) {
-    // const {
-    //   findedComment,
-    //   user,
-    // } = await this.commentsService.updateCommentByIdWithLikeStatus(req.headers.authorization as string, commentId);
-    // return await this.likeHandler.commentHandler(req.body.likeStatus, findedComment!, user!);
+    const {
+      findedComment,
+      user,
+    } = await this.commentsService.updateCommentByIdWithLikeStatus(req.headers.authorization as string, commentId);
+    return await this.likeHandler.commentHandler(req.body.likeStatus, findedComment!, user!);
   }
 
 }
