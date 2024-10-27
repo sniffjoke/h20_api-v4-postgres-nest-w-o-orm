@@ -40,7 +40,6 @@ export class PostsController {
     const newPost = await this.postsQueryRepository.postOutput(postId);
     const postWithDetails = await this.postsService.generateOnePostWithLikesDetails(newPost, req.headers.authorization as string)
     return postWithDetails;
-    // return newPost
   }
 
   @Get('posts/:id')

@@ -1,6 +1,5 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, Put, Req, UseGuards } from '@nestjs/common';
 import { CommentsQueryRepository } from '../infrastructure/comments.query-repository';
-import { CommentViewModel } from './models/output/comment.view.model';
 import { Request } from 'express';
 import { CommentsService } from '../application/comments.service';
 import { JwtAuthGuard } from '../../../core/guards/jwt-auth.guard';
@@ -25,7 +24,6 @@ export class CommentsController {
     const comment = await this.commentsRepository.findCommentById(id);
     const commentViewData = this.commentsQueryRepository.commentOutputMap(comment);
     const commentDataWithLike = await this.commentsService.generateNewCommentData(commentViewData, req.headers.authorization as string);
-    // const commentWithLikeViewData = await this.commentsQueryRepository.commentOutput(commentDataWithLike.id)
     return commentDataWithLike;
   }
 

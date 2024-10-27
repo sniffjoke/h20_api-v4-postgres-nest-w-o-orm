@@ -32,6 +32,4 @@ export class DevicesController {
     return deleteDevices
   }
 
-
-
 }

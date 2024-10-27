@@ -4,18 +4,6 @@ export enum LikeStatus {
     Dislike = 'Dislike'
 }
 
-// class LikeDetails {
-//     addedAt: string
-//     userId: string
-//     login: string
-// }
-
-// class ExtendedLikesInfo {
-//     likesCount: number;
-//     dislikesCount: number;
-//     newestLikes: LikeDetails[];
-// }
-
 export class PostViewModel {
     id: string;
     title: string;
@@ -23,6 +11,5 @@ export class PostViewModel {
     content: string;
     blogId: string;
     blogName: string;
-    // extendedLikesInfo: ExtendedLikesInfo
     createdAt: string;
 }

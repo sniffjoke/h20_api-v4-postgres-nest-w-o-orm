@@ -1,7 +1,7 @@
-import {Injectable, NotFoundException} from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import {BlogsRepository} from "../infrastructure/blogs.repository";
 import {BlogCreateModel} from "../api/models/input/create-blog.input.model";
-import { PostCreateModel, PostCreateModelWithParams } from '../../posts/api/models/input/create-post.input.model';
+import { PostCreateModelWithParams } from '../../posts/api/models/input/create-post.input.model';
 import { PostsRepository } from '../../posts/infrastructure/posts.repository';
 
 @Injectable()

@@ -2,7 +2,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { PostViewModel } from '../api/models/output/post.view.model';
-import { id } from 'date-fns/locale';
 import { PaginationBaseModel } from '../../../core/base/pagination.base.model';
 
 
@@ -12,21 +11,6 @@ export class PostsQueryRepository {
     @InjectDataSource() private readonly dataSource: DataSource,
   ) {
   }
-
-  async getAllPosts() {
-    // const posts = await this.postModel.find()
-    // return posts.map(post => this.postOutputMap(post as HydratedDocument<PostViewModel>))
-  }
-
-  //
-  // async getAllPostsByBlogId(blogId: string): Promise<PostViewModel[]> {
-  //     const blog = await this.blogModel.findById(blogId)
-  //     if (!blog) {
-  //         throw new NotFoundException("Blog not found")
-  //     }
-  //     const posts = await this.postModel.find({blogId})
-  //     return posts.map(post => this.postOutputMap(post as HydratedDocument<PostViewModel>))
-  // }
 
   async getAllPostsWithQuery(query: any, blogId?: string) {
     const generateQuery = await this.generateQuery(query, blogId);

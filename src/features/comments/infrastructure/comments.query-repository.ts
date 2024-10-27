@@ -12,11 +12,6 @@ export class CommentsQueryRepository {
     ) {
     }
 
-    async getAllCommentsByPostId(postId: string) {
-        // const comments = await this.commentModel.find({postId})
-        // return comments.map(comment => this.commentOutputMap(comment as unknown as HydratedDocument<CommentViewModel>))
-    }
-
     async getAllCommentByPostIdWithQuery(query: any, postId: string) {
         const generateQuery = await this.generateQuery(query, postId)
         const findedPost = await this.dataSource.query(
@@ -45,21 +40,12 @@ export class CommentsQueryRepository {
               generateQuery.pageSize,
           ],
         )
-        // if (!post) {
-        //     throw new NotFoundException("Post not found")
-        // }
-        // const items = await this.commentModel
-        //   .find({postId})
-        //   .sort({[generateQuery.sortBy]: generateQuery.sortDirection})
-        //   .limit(generateQuery.pageSize)
-        //   .skip((generateQuery.page - 1) * generateQuery.pageSize)
         const commentsOutput = comments.map(item => this.commentOutputMap(item))
         const resultPosts = new PaginationBaseModel<CommentViewModel>(generateQuery, commentsOutput)
         return resultPosts
     }
 
     private async generateQuery(query: any, postId: string) {
-        // const totalCount = await this.commentModel.countDocuments({postId})
         const totalCount = await this.dataSource.query(
           `
                 SELECT COUNT(*) 
@@ -100,9 +86,6 @@ export class CommentsQueryRepository {
     }
 
     commentOutputMap(comment: any) {
-        // if (!comment) {
-        //     throw new NotFoundException("Comment not found")
-        // }
         const {id, content, commentatorInfoUserId, commentatorInfoUserLogin, likesInfoLikesCount, likesInfoDislikesCount, createdAt} = comment
         return {
             id: id.toString(),

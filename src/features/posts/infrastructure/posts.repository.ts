@@ -78,8 +78,4 @@ export class PostsRepository {
     return deleteBlog;
   }
 
-  // async getByIdOrThrow(): HydratedDocument<Post> {
-//
-// }
-
 }

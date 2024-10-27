@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PostsRepository } from '../infrastructure/posts.repository';
-import { PostCreateModel, PostCreateModelWithParams } from '../api/models/input/create-post.input.model';
+import { PostCreateModel } from '../api/models/input/create-post.input.model';
 import { TokensService } from '../../tokens/application/tokens.service';
-import { LikeStatus, PostViewModel } from '../api/models/output/post.view.model';
+import { LikeStatus } from '../api/models/output/post.view.model';
 import { BlogsRepository } from '../../blogs/infrastructure/blogs.repository';
 import { UsersRepository } from '../../users/infrastructure/users.repository';
 import { InjectDataSource } from '@nestjs/typeorm';
@@ -65,7 +65,6 @@ export class PostsService {
   }
 
   async generateOnePostWithLikesDetails(post: any, bearerHeader: string) {
-    // const isUserExists = await this.usersRepository.findUserByToken(bearerHeader)
     let user;
     if (bearerHeader) {
       try {

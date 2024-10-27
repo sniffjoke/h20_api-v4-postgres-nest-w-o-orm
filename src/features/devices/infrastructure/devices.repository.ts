@@ -57,19 +57,12 @@ export class DevicesRepository {
   // update device info
 
   async updateDeviceById(id: string, deviceData: any) {
-    // return this.dRepository.save({
-    //   id,
-    //   ...deviceData
-    // });
     return await this.dataSource.query('UPDATE devices SET "lastActiveDate" = $1 WHERE id = $2', [deviceData, id]);
   }
 
   // update device info after refresh tokens
 
   async updateDeviceByIdAndByDeviceId(id: string, deviceId: string, deviceData: any) {
-    // const checkDeviceExists = await this.dataSource.query('SELECT * FROM devices WHERE "id" = $1 AND "deviceId" = $2', [
-    //   deviceData, id, deviceId
-    // ])
     return await this.dataSource.query(`
     UPDATE devices SET "lastActiveDate" = $1 WHERE "userId" = $2 AND "deviceId" = $3
     `,

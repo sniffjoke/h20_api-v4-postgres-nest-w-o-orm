@@ -66,7 +66,6 @@ export class CommentsRepository {
   }
 
   async deleteComment(commentId: string) {
-    // const findedComment = await this.findCommentById(commentId);
     const deleteComment = await this.dataSource.query(
       `
                     DELETE FROM comments 

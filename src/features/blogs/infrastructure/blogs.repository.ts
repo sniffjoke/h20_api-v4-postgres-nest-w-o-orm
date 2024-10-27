@@ -2,7 +2,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { BlogCreateModel } from '../api/models/input/create-blog.input.model';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { CreateBlogUseCase } from '../application/use-cases/blogs.use-case';
 
 
 @Injectable()

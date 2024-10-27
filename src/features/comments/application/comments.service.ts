@@ -9,7 +9,6 @@ import { LikeStatus } from '../../posts/api/models/output/post.view.model';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { UsersCheckHandler } from '../../users/domain/users.check-handler';
-import { validate } from 'class-validator';
 
 @Injectable()
 export class CommentsService {
@@ -36,12 +35,6 @@ export class CommentsService {
       { userId: user.id, userLogin: user.login },
       postId,
     );
-    // const newComment = new this.commentModel({
-    //   ...comment,
-    //   postId,
-    //   commentatorInfo: { userId: user._id, userLogin: user.login },
-    // });
-    // const saveData = await this.commentsRepository.saveComment(newComment);
     return newCommentId;
   }
 
@@ -57,16 +50,9 @@ export class CommentsService {
   }
 
   async deleteCommentById(id: string, bearerHeader: string) {
-    // const user = await this.usersRepository.findUserByToken(bearerHeader);
-    // if (!isValidObjectId(id)) {
-    //   throw new NotFoundException(`Comment with id ${id} not found`);
-    // }
     const token = this.tokensService.getToken(bearerHeader);
     const decodedToken = this.tokensService.decodeToken(token);
     const findedComment = await this.commentsRepository.findCommentById(id);
-    // if (!findedComment) {
-    //   throw new NotFoundException(`Comment with id ${id} not found`);
-    // }
     const isOwner = this.usersCheckHandler.checkIsOwner(findedComment.commentatorInfoUserId, decodedToken._id.toString());
     if (isOwner) {
       const deleteComment = await this.commentsRepository.deleteComment(id);
@@ -94,7 +80,6 @@ export class CommentsService {
   }
 
   async generateNewCommentData(item: any, bearerHeader: string) {
-    // const isUserExists = await this.usersRepository.findUserByToken(bearerHeader);
     let user;
     if (bearerHeader) {
       try {
@@ -107,7 +92,6 @@ export class CommentsService {
     } else {
       user = null;
     }
-    // const likeStatus = await this.likeModel.findOne({ commentId: item.id, userId: isUserExists?._id });
     const likeStatus = await this.dataSource.query(
       `
             SELECT "status"
